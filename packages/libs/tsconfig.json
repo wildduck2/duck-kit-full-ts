@@ -1,10 +1,10 @@
 {
-  "compilerOptions": {
-    "base": "./",
-    "outDir": "./dist",
-    "paths": {}
-  },
-  "exclude": ["node_modules", "dist"],
-  "extends": "@acme/typescript-config/internal-package.json",
-  "include": [".", "../"]
+	"compilerOptions": {
+		"base": "./",
+		"outDir": "./dist",
+		"paths": {}
+	},
+	"exclude": ["node_modules", "dist"],
+	"extends": "@acme/typescript-config/internal-package.json",
+	"include": [".", "../"]
 }
