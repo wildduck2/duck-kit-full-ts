@@ -67,12 +67,12 @@ export function Combobox<TData extends readonly ComboboxItemType[], TType extend
                   <Separator orientation="vertical" />
                   <div className="flex gap-1">
                     {_value.length > MAX_SELECTION ? (
-                      <Badge className="px-2 py-[3px] rounded-sm font-normal" variant={'secondary'}>
+                      <Badge className="rounded-sm px-2 py-[3px] font-normal" variant={'secondary'}>
                         +{_value.length} Selected
                       </Badge>
                     ) : (
                       _value.map((item) => (
-                        <Badge className="px-2 py-[2px] rounded-[3px] capitalize" key={item} variant={'secondary'}>
+                        <Badge className="rounded-[3px] px-2 py-[2px] capitalize" key={item} variant={'secondary'}>
                           {item}
                         </Badge>
                       ))
@@ -90,7 +90,7 @@ export function Combobox<TData extends readonly ComboboxItemType[], TType extend
       <PopoverContent {...popoverContent} className={cn('w-[200px] p-0', popoverContent?.className)}>
         <Command {...command}>
           {withSearch && (
-            <CommandInput {...commandInput} className={cn('h-8 [&_svg]:size-[18px] px-2', commandInput)} />
+            <CommandInput {...commandInput} className={cn('h-8 px-2 [&_svg]:size-[18px]', commandInput)} />
           )}
           <CommandList>
             {commandEmpty && <CommandEmpty>{commandEmpty}</CommandEmpty>}
@@ -122,7 +122,7 @@ export function ComboboxItem<T extends ComboboxItemType>({
         onSelect?.(item.value)
       }}
       {...props}>
-      <Checkbox checked={checked} className="border-foreground/50 pointer-events-none" id={item?.value} />
+      <Checkbox checked={checked} className="pointer-events-none border-foreground/50" id={item?.value} />
       {item?.label}
     </CommandItem>
   )
