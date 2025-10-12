@@ -1,4 +1,4 @@
-export type ResponseType<TData extends unknown, TError extends readonly string[] = []> =
+export type ResponseType<TData extends unknown, TError extends readonly string[] = any> =
   | {
       state: 'error'
       error: TError[number]

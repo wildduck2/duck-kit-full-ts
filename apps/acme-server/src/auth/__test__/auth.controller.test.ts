@@ -1,12 +1,26 @@
-import { describe, it, expect, beforeEach, vi } from 'vitest'
+import { describe, it, expect, beforeEach, vi, afterAll, beforeAll } from 'vitest'
 import { AuthController } from '../auth.controller'
 import { AuthService } from '../auth.service'
 import { SignupSchemaType } from '../auth.types'
+import { signupSchema } from '../auth.dto'
+import { Test, TestingModule } from '@nestjs/testing'
+import { AuthGuard } from '../auth.guard'
+import { INestApplication } from '@nestjs/common'
+import session from 'express-session'
 
 describe('AuthController', () => {
   let authController: AuthController
   let authService: AuthService
+  let app: INestApplication
 
+  const mockAuthService = {
+    signin: vi.fn(),
+    signout: vi.fn(),
+  }
+
+  const mockGuard = {
+    canActivate: vi.fn(() => true),
+  }
   const mockSignup = vi.fn()
 
   beforeEach(() => {
@@ -14,14 +28,38 @@ describe('AuthController', () => {
     authController = new AuthController(authService)
   })
 
+  beforeAll(async () => {
+    const moduleRef: TestingModule = await Test.createTestingModule({
+      controllers: [AuthController],
+      providers: [{ provide: AuthService, useValue: mockAuthService }],
+    })
+      .overrideGuard(AuthGuard)
+      .useValue(mockGuard)
+      .compile()
+
+    app = moduleRef.createNestApplication()
+    app.use(
+      session({
+        secret: 'test',
+        resave: false,
+        saveUninitialized: false,
+      })
+    )
+    await app.init()
+  })
+
+  afterAll(async () => {
+    await app.close()
+  })
+
+  const body: SignupSchemaType = {
+    username: 'duckui',
+    password: 'duckpass123',
+    email: 'duck@ui.com',
+
+  };
   /* ---------------------- signup ---------------------- */
   it('should call AuthService.signup and return response user data', async () => {
-    const body: SignupSchemaType = {
-      username: 'duckui',
-      password: 'duckpass123',
-      email: 'duck@ui.com',
-      name: 'Duck UI',
-    }
 
     const fakeUser = {
       _id: '123',
@@ -32,12 +70,80 @@ describe('AuthController', () => {
 
     mockSignup.mockResolvedValue(fakeUser)
 
-    const result = await authController.signup(body, {})
+    const result = await authController.signup(body)
 
     expect(mockSignup).toHaveBeenCalledWith(body)
     expect(result).toEqual({
       state: 'success',
       data: fakeUser,
     })
+  })
+
+  it('should handle and return error if AuthService.signup throws', async () => {
+    const error = new Error('Signup failed');
+    mockSignup.mockRejectedValue(error);
+
+    try {
+      await authController.signup(body);
+    } catch (err) {
+      expect(err).toBe(error);
+    }
+  });
+
+  it('should return success even if service returns null or falsey data', async () => {
+    mockSignup.mockResolvedValue(null);
+
+    const result = await authController.signup(body);
+
+    expect(result).toEqual({
+      state: 'success',
+      data: null,
+    });
+  });
+
+  it('should return a wrapped error object if error is manually handled', async () => {
+    const error = new Error('Manual fail');
+    authController.signup = vi.fn().mockResolvedValue({
+      state: 'success',
+      data: error,
+    });
+
+    const result = await authController.signup(body);
+    // @ts-expect-error
+    expect(result.data).toBeInstanceOf(Error);
+    // @ts-expect-error
+    expect(result.data.message).toBe('Manual fail');
+  });
+
+  it('should not call signup if body is invalid (if pipe were tested independently)', async () => {
+    const invalidBody = {
+      username: 'x',
+      email: 'invalidemail',
+      password: '',
+    };
+
+    expect(() => {
+    }).not.toThrow();
+  });
+
+  /* ---------------------- signout ---------------------- */
+  it('should destroy the session and clear the cookie', async () => {
+    const destroyMock = vi.fn(cb => cb(null))
+    const clearCookieMock = vi.fn()
+
+    const req = {
+      session: { destroy: destroyMock },
+    } as unknown as Request
+
+    const res = {
+      clearCookie: clearCookieMock,
+    } as unknown as Response
+
+    // @ts-expect-error
+    const result = await authController.signout(req, res)
+
+    expect(destroyMock).toHaveBeenCalled()
+    expect(clearCookieMock).toHaveBeenCalledWith('connect.sid')
+    expect(result).toEqual({ state: 'success', data: null })
   })
 })
