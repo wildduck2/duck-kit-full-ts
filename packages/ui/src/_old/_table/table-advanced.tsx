@@ -74,7 +74,7 @@ export function DuckTableProvider<TColumnName extends string[]>({
         tableColumns,
         tableRows: table_rows,
       }}>
-      <div className={cn(`w-full- flex flex-col gap-4 w-[800px] h-[500px]`, className)} {...props}>
+      <div className={cn(`flex h-[500px] w-[800px] w-full- flex-col gap-4`, className)} {...props}>
         {children}
       </div>
     </DuckTable.Provider>
@@ -87,7 +87,7 @@ export function DuckTable({ wrapper, className, children, ...props }: DuckTableP
 
   return (
     <ScrollArea
-      className={cn('border border-border rounded-lg !overflow-visible relative', wrapperClassName)}
+      className={cn('!overflow-visible relative rounded-lg border border-border', wrapperClassName)}
       {...wrapperProps}>
       <Table {...props}>{children}</Table>
     </ScrollArea>
@@ -117,7 +117,7 @@ export function DuckTableHeader({}: DuckTableHeaderProps) {
               !column['aria-hidden'] && (
                 <React.Fragment key={idx}>
                   <TableHead
-                    className={cn('py-2', idx === 0 && 'justify-start ', sortable && 'px-2', className)}
+                    className={cn('py-2', idx === 0 && 'justify-start', sortable && 'px-2', className)}
                     {...props}>
                     {idx === 0 ? (
                       <div className="flex items-center gap-4">
@@ -144,7 +144,7 @@ export function DuckTableHeadCheckbox({ className, ...props }: DuckTableHeadChec
   const { selectedRows, setSelectedRows, tableRows } = useDuckTable()
 
   return (
-    <div className={cn('flex items-center w-fit data-[state=open]:bg-accent text-xs capitalize', className)} {...props}>
+    <div className={cn('flex w-fit items-center text-xs capitalize data-[state=open]:bg-accent', className)} {...props}>
       <Checkbox
         checked={
           selectedRows.size === tableRows.length
@@ -184,7 +184,7 @@ export function DuckTableHeadSelectable<TSort extends boolean = true>({
               aria-controls="dropdown-menu"
               aria-label="table-column-options"
               aria-sort={column['aria-sort']}
-              className="data-[state=open]:bg-accent [&>div]:justify-between w-full [&>div]:w-full capitalize"
+              className="w-full capitalize data-[state=open]:bg-accent [&>div]:w-full [&>div]:justify-between"
               label={
                 showLabel
                   ? {
@@ -273,7 +273,7 @@ export function DuckTableRowCheckbox<TColumnName extends readonly TableColumnTyp
   const { selectedRows, setSelectedRows } = useDuckTable()
 
   return (
-    <div className={cn('flex items-center w-fit data-[state=open]:bg-accent text-xs capitalize', className)} {...props}>
+    <div className={cn('flex w-fit items-center text-xs capitalize data-[state=open]:bg-accent', className)} {...props}>
       <Checkbox
         checked={selectedRows.has(tableRow) ? true : false}
         className="border-border"

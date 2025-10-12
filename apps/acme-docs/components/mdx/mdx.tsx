@@ -62,7 +62,7 @@ const components = {
   // span: SpanBlock,
   Image,
   img: ({ className, alt, ...props }: React.ImgHTMLAttributes<HTMLImageElement>) => (
-    <img alt={alt} className={cn('rounded-md', className)} {...props} />
+    <img alt={alt} className={cn('rounded-xl', className)} height={'auto'} width={'100%'} {...props} />
   ),
   Kbd: Kbd,
   Link: LinkBlock,

@@ -125,7 +125,7 @@ export const BuildTab = () => {
   return (
     <TabsContent className="relative overflow-hidden" value="build">
       <div className="h-[500px] overflow-hidden rounded-lg">
-        <img alt="build" className="object-cover" src="/builder.png" />
+        <img alt="build" className="object-cover" height={'auto'} src="/builder.png" width={'100%'} />
       </div>
 
       <div className="absolute inset-0 top-0 left-0 flex h-[500px] flex-col items-center justify-center gap-4 rounded-md bg-zinc-700/10 px-4 py-2 backdrop-blur-sm dark:bg-zinc-700/50">

@@ -68,7 +68,7 @@ const DrawerTrigger = ({ children, onClick, ...props }: React.ComponentPropsWith
 function DrawerDrag({ className }: React.ComponentPropsWithoutRef<'span'>) {
   return (
     <div
-      className={cn('mx-auto my-4 h-2 w-[100px] rounded-full bg-muted cursor-grab active:cursor-grabbing', className)}
+      className={cn('mx-auto my-4 h-2 w-[100px] cursor-grab rounded-full bg-muted active:cursor-grabbing', className)}
     />
   )
 }
@@ -129,15 +129,13 @@ const DrawerContent = ({
       ref={ref}
       {...props}
       className={cn(
-        `ease-cubic-bezier(0.32,_0.72,_0,_1)
-        active:duration-0 duration-500 rounded-t-lg [@media(hover:none)]:open:duration-0 has-active:backdrop:pointer-events-none
-        will-change-transform `,
+        `rounded-t-lg duration-500 ease-cubic-bezier(0.32,_0.72,_0,_1) will-change-transform active:duration-0 has-active:backdrop:pointer-events-none [@media(hover:none)]:open:duration-0`,
         AnimVariants(),
         AnimSheetVariants({ side: side }),
         className,
       )}>
       <div
-        className="content-wrapper !p-0 select-none touch-none will-change-transform"
+        className="!p-0 touch-none select-none will-change-transform content-wrapper"
         onPointerCancel={onPointerUp}
         onPointerDown={onPointerDown}
         onPointerLeave={onPointerUp}

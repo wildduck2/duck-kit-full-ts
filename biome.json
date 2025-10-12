@@ -62,15 +62,7 @@
       "!**/test/**",
       "!**/public/**",
       "!**/.next/**",
-      "!**/apps/docs/.next/**",
-      "!**/website/**",
-      "!**/.*/**",
-      "!**/old_*/**",
-      "!packages/___/**",
-      "./apps/docs/__ui_registry__/**",
-      "!packages/_oldstuff_refactor/**",
-      "!packages/benchmark/**",
-      "!packages/duck-orm-skitch/**"
+      "!**/.*/**"
     ],
     "indentStyle": "space",
     "indentWidth": 2,
@@ -105,25 +97,8 @@
       "!**/coverage/**",
       "!**/public/**",
       "!**/.next/**",
-      "!**/apps/docs/.next/**",
-      "!**/website/**",
       "!**/.*/**",
-      "!**/old_*/**",
-      "!**/_*/**",
-      "!apps/docs/**",
-      "!apps/upload-api/**",
-      "!apps/www/**",
-      "!apps/benchmark/**",
-      "!packages/___/**",
-      "!packages/_oldstuff_refactor/**",
-      "!packages/duck-state/**",
-      "!packages/duck-benchmark/**",
-      "!packages/registry-build-duckui/**",
-      "!packages/sandbox-server/**",
-      "!**/duck-state/**",
-      "!**/upload/**",
-      "!**/table/**",
-      "!**/combobox.tsx"
+      "!**/*.css"
     ],
     "rules": {
       "complexity": {
@@ -150,8 +125,7 @@
         "noThenProperty": "error",
         "noUnknownAtRules": "info",
         "noVar": "error",
-        "useGetterReturn": "error",
-        "useIsArray": "error"
+        "useGetterReturn": "error"
       }
     }
   },
