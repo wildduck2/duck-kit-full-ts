@@ -8,8 +8,6 @@ import { patchNestJsSwagger } from 'nestjs-zod'
 import { createClient } from 'redis'
 import { AppModule } from './app.module'
 import { EventsAdapter } from './auth'
-import { AuthMessageType } from './auth/auth.types'
-import { throwError } from './common/libs'
 
 async function bootstrap() {
   const app = await NestFactory.create<NestExpressApplication>(AppModule)

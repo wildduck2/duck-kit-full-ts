@@ -5,7 +5,7 @@
     "@dnd-kit/modifiers": "^9.0.0",
     "@dnd-kit/sortable": "^10.0.0",
     "@dnd-kit/utilities": "^3.2.2",
-    "@gentleduck/hooks": "^0.1.6",
+    "@gentleduck/hooks": "^0.1.8",
     "@gentleduck/lazy": "^1.2.9",
     "@gentleduck/libs": "^0.1.8",
     "@gentleduck/variants": "^0.1.16",
