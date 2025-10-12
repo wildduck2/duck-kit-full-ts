@@ -4,7 +4,6 @@ import { SigninSchemaType, SignupSchemaType } from '../auth.types'
 import { PasswordHasher } from '~/common/libs'
 import { throwError } from '~/common/libs'
 
-
 vi.mock('~/common/libs', () => ({
   PasswordHasher: {
     hashPassword: vi.fn(() => Promise.resolve('hashed-password')),
@@ -18,7 +17,6 @@ describe('AuthService', () => {
 
   const mockInsertOne = vi.fn()
   const mockFindOne = vi.fn()
-
 
   const mockUserModel = {
     insertOne: mockInsertOne,
@@ -111,7 +109,7 @@ describe('AuthService', () => {
 
   /* ---------------------- signup: hashPassword fails ---------------------- */
   it('should throw if hashPassword throws', async () => {
-    ; (PasswordHasher.hashPassword as any).mockRejectedValueOnce(new Error('Hashing failed'))
+    ;(PasswordHasher.hashPassword as any).mockRejectedValueOnce(new Error('Hashing failed'))
 
     await expect(service.signup(validBody)).rejects.toThrow('Hashing failed')
     expect(mockInsertOne).not.toHaveBeenCalled()
@@ -120,15 +118,12 @@ describe('AuthService', () => {
   /* ---------------------- signin: success ---------------------- */
   it('should return user without password if credentials are valid', async () => {
     mockFindOne.mockResolvedValue(fakeUser)
-      ; (PasswordHasher.comparePassword as Mock)?.mockResolvedValue(true)
+    ;(PasswordHasher.comparePassword as Mock)?.mockResolvedValue(true)
 
     const result = await service.signin(validInput)
 
     expect(mockFindOne).toHaveBeenCalledWith({ username: 'duckui' })
-    expect(PasswordHasher.comparePassword).toHaveBeenCalledWith(
-      'duckpass123',
-      'hashed-password'
-    )
+    expect(PasswordHasher.comparePassword).toHaveBeenCalledWith('duckpass123', 'hashed-password')
     expect(result).toEqual({
       _id: 'abc123',
       username: 'duckui',
@@ -158,17 +153,14 @@ describe('AuthService', () => {
   /* ---------------------- signin: password incorrect ---------------------- */
   it('should throw if password does not match', async () => {
     mockFindOne.mockResolvedValue(fakeUser)
-      ; (PasswordHasher.comparePassword as Mock).mockResolvedValue(false)
-      ; (throwError as Mock).mockReturnValue(new Error('PASSWORD_INVALID'))
+    ;(PasswordHasher.comparePassword as Mock).mockResolvedValue(false)
+    ;(throwError as Mock).mockReturnValue(new Error('PASSWORD_INVALID'))
 
     const result = await service.signin(validInput)
 
     expect(result).toEqual(expect.any(Error))
     expect((result as Error).message).toContain('PASSWORD_INVALID')
-    expect(PasswordHasher.comparePassword).toHaveBeenCalledWith(
-      'duckpass123',
-      'hashed-password'
-    )
+    expect(PasswordHasher.comparePassword).toHaveBeenCalledWith('duckpass123', 'hashed-password')
   })
 
   /* ---------------------- signin: findOne throws ---------------------- */
@@ -181,11 +173,8 @@ describe('AuthService', () => {
   /* ---------------------- signin: comparePassword throws ---------------------- */
   it('should throw if comparePassword throws', async () => {
     mockFindOne.mockResolvedValue(fakeUser)
-      ; (PasswordHasher.comparePassword as Mock).mockRejectedValue(
-        new Error('bcrypt failure')
-      )
+    ;(PasswordHasher.comparePassword as Mock).mockRejectedValue(new Error('bcrypt failure'))
 
     await expect(service.signin(validInput)).rejects.toThrow('bcrypt failure')
   })
-
 })

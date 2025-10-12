@@ -43,7 +43,7 @@ describe('AuthController', () => {
         secret: 'test',
         resave: false,
         saveUninitialized: false,
-      })
+      }),
     )
     await app.init()
   })
@@ -56,11 +56,9 @@ describe('AuthController', () => {
     username: 'duckui',
     password: 'duckpass123',
     email: 'duck@ui.com',
-
-  };
+  }
   /* ---------------------- signup ---------------------- */
   it('should call AuthService.signup and return response user data', async () => {
-
     const fakeUser = {
       _id: '123',
       ...body,
@@ -80,55 +78,54 @@ describe('AuthController', () => {
   })
 
   it('should handle and return error if AuthService.signup throws', async () => {
-    const error = new Error('Signup failed');
-    mockSignup.mockRejectedValue(error);
+    const error = new Error('Signup failed')
+    mockSignup.mockRejectedValue(error)
 
     try {
-      await authController.signup(body);
+      await authController.signup(body)
     } catch (err) {
-      expect(err).toBe(error);
+      expect(err).toBe(error)
     }
-  });
+  })
 
   it('should return success even if service returns null or falsey data', async () => {
-    mockSignup.mockResolvedValue(null);
+    mockSignup.mockResolvedValue(null)
 
-    const result = await authController.signup(body);
+    const result = await authController.signup(body)
 
     expect(result).toEqual({
       state: 'success',
       data: null,
-    });
-  });
+    })
+  })
 
   it('should return a wrapped error object if error is manually handled', async () => {
-    const error = new Error('Manual fail');
+    const error = new Error('Manual fail')
     authController.signup = vi.fn().mockResolvedValue({
       state: 'success',
       data: error,
-    });
+    })
 
-    const result = await authController.signup(body);
+    const result = await authController.signup(body)
     // @ts-expect-error
-    expect(result.data).toBeInstanceOf(Error);
+    expect(result.data).toBeInstanceOf(Error)
     // @ts-expect-error
-    expect(result.data.message).toBe('Manual fail');
-  });
+    expect(result.data.message).toBe('Manual fail')
+  })
 
   it('should not call signup if body is invalid (if pipe were tested independently)', async () => {
     const invalidBody = {
       username: 'x',
       email: 'invalidemail',
       password: '',
-    };
+    }
 
-    expect(() => {
-    }).not.toThrow();
-  });
+    expect(() => {}).not.toThrow()
+  })
 
   /* ---------------------- signout ---------------------- */
   it('should destroy the session and clear the cookie', async () => {
-    const destroyMock = vi.fn(cb => cb(null))
+    const destroyMock = vi.fn((cb) => cb(null))
     const clearCookieMock = vi.fn()
 
     const req = {
