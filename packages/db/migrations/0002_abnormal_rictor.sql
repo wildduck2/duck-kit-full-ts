@@ -1,1 +1,0 @@
-CREATE TYPE "public"."token_status" AS ENUM('active', 'revoked', 'expired');

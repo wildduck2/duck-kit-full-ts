@@ -63,7 +63,3 @@ async function bootstrap() {
 }
 
 bootstrap()
-
-// what's an observable
-// what's db injections
-// what's the difference between middleware and interceptor
