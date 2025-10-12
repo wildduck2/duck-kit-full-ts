@@ -17,10 +17,7 @@
     "inlineSources": false,
     "isolatedModules": true,
     "jsx": "preserve",
-    "lib": [
-      "DOM",
-      "ES2022"
-    ],
+    "lib": ["DOM", "ES2022"],
     "moduleDetection": "force",
     "noEmit": true,
     "noErrorTruncation": true,
@@ -40,11 +37,5 @@
     "strictPropertyInitialization": false,
     "target": "ESNext"
   },
-  "exclude": [
-    "node_modules",
-    "build",
-    "dist",
-    ".next",
-    ".expo"
-  ]
+  "exclude": ["node_modules", "build", "dist", ".next", ".expo"]
 }
