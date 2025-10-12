@@ -46,8 +46,6 @@ services:
       MINIO_ROOT_PASSWORD: minioadmin
     volumes:
       - minio-data:/data
-    networks:
-      - nest-net
 
   # --- Redis ---
   acme-redis:
