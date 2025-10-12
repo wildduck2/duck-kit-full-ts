@@ -14,7 +14,7 @@ export class EventsAdapter extends IoAdapter {
     const server: Server = super.createIOServer(port, options)
 
     server.use(
-      //@ts-ignore
+      //@ts-expect-error
       sharedsession(this.session, {}),
     )
     return server

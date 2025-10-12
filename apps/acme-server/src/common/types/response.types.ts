@@ -5,6 +5,6 @@ export type ResponseType<TData extends unknown, TError extends readonly string[]
       message: string
     }
   | {
-      data: TData
+      data: Awaited<ReturnType<TData>>
       state: 'success'
     }
