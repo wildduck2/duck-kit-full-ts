@@ -1,13 +1,12 @@
-
 /**
  * @name ACCESS_TOKENS
  * @description This is for the access tokens and verification tokens and so on
  */
 import { Test } from '@nestjs/testing'
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
-import { AccessTokensService } from '../access-tokens.service'
-import { DrizzleAsyncProvider } from '~/drizzle'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
 import { throwError } from '~/common/libs'
+import { DrizzleAsyncProvider } from '~/drizzle'
+import { AccessTokensService } from '../access-tokens.service'
 
 // mock throwError so we can assert calls and keep behavior of throwing after being called
 vi.mock('~/common/libs', async (importOriginal) => {
@@ -28,22 +27,19 @@ describe('AccessTokensService (refined error semantics)', () => {
 
   beforeEach(async () => {
     mockDb = {
+      delete: vi.fn(),
+      insert: vi.fn(),
       query: {
         accessTokens: {
-          findMany: vi.fn(),
           findFirst: vi.fn(),
+          findMany: vi.fn(),
         },
       },
-      insert: vi.fn(),
       update: vi.fn(),
-      delete: vi.fn(),
     }
 
     const moduleRef = await Test.createTestingModule({
-      providers: [
-        AccessTokensService,
-        { provide: DrizzleAsyncProvider, useValue: mockDb },
-      ],
+      providers: [AccessTokensService, { provide: DrizzleAsyncProvider, useValue: mockDb }],
     }).compile()
 
     service = moduleRef.get(AccessTokensService)
@@ -106,7 +102,7 @@ describe('AccessTokensService (refined error semantics)', () => {
   // ========== create ==========
   it('create - inserts and returns token on success; token passed to insert is 64 chars', async () => {
     // Prepare a fake returned row (DB returning)
-    const returnedRow = { id: '1', token: 'x'.repeat(64), expires_at: new Date() }
+    const returnedRow = { expires_at: new Date(), id: '1', token: 'x'.repeat(64) }
 
     // capture the values passed to .values(...) so we can assert token length
     let capturedValues: any = null
@@ -307,10 +303,8 @@ describe('AccessTokensService (refined error semantics)', () => {
           returning: () => Promise.reject(new Error('update fail')),
         }),
       }),
-    }))    
+    }))
 
     await expect(service.renew('1')).rejects.toThrow('ACCESS_TOKENS_RENEW_FAILED:500')
   })
-
 })
-

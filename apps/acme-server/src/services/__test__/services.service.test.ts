@@ -2,12 +2,13 @@
  * @name SERVICES
  * @description Unit tests for ServicesService
  */
-import { describe, it, expect, beforeEach, afterEach, vi } from 'vitest'
+
+import { Test } from '@nestjs/testing'
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest'
+import { throwError } from '~/common/libs'
+import { DrizzleAsyncProvider } from '~/drizzle'
 import { ServicesService } from '../services.service'
 import type { CreateServicesDto, UpdateServicesDto } from '../services.types'
-import { throwError } from '~/common/libs'
-import { Test } from '@nestjs/testing'
-import { DrizzleAsyncProvider } from '~/drizzle'
 
 // Mock throwError so we can assert calls and keep behavior of throwing after being called
 vi.mock('~/common/libs', async (importOriginal) => {
@@ -27,22 +28,19 @@ describe('ServicesService (unit)', () => {
 
   beforeEach(async () => {
     mockDb = {
+      delete: vi.fn(),
+      insert: vi.fn(),
       query: {
         services: {
-          findMany: vi.fn(),
           findFirst: vi.fn(),
+          findMany: vi.fn(),
         },
       },
-      insert: vi.fn(),
       update: vi.fn(),
-      delete: vi.fn(),
     }
 
     const moduleRef = await Test.createTestingModule({
-      providers: [
-        ServicesService,
-        { provide: DrizzleAsyncProvider, useValue: mockDb },
-      ],
+      providers: [ServicesService, { provide: DrizzleAsyncProvider, useValue: mockDb }],
     }).compile()
 
     service = moduleRef.get(ServicesService)
@@ -105,7 +103,7 @@ describe('ServicesService (unit)', () => {
 
   /* ===== CREATE ===== */
   it('inserts and returns created service on success', async () => {
-    const created = { id: 'c1', name: 'svc1', description: 'desc' }
+    const created = { description: 'desc', id: 'c1', name: 'svc1' }
 
     mockDb.insert.mockImplementation(() => ({
       values: () => ({
@@ -113,7 +111,7 @@ describe('ServicesService (unit)', () => {
       }),
     }))
 
-    const dto = { name: 'svc1', description: 'desc' } as CreateServicesDto
+    const dto = { description: 'desc', name: 'svc1' } as CreateServicesDto
     const res = await service.create(dto)
 
     expect(res).toEqual(created)
@@ -127,8 +125,7 @@ describe('ServicesService (unit)', () => {
       }),
     }))
 
-    await expect(service.create({ name: 'svc1' } as CreateServicesDto))
-      .rejects.toThrow('SERVICES_CREATE_FAILED:404')
+    await expect(service.create({ name: 'svc1' } as CreateServicesDto)).rejects.toThrow('SERVICES_CREATE_FAILED:404')
   })
 
   it('throws 500 when insert rejects', async () => {
@@ -138,8 +135,7 @@ describe('ServicesService (unit)', () => {
       }),
     }))
 
-    await expect(service.create({ name: 'svc1' } as CreateServicesDto))
-      .rejects.toThrow('SERVICES_CREATE_FAILED:500')
+    await expect(service.create({ name: 'svc1' } as CreateServicesDto)).rejects.toThrow('SERVICES_CREATE_FAILED:500')
   })
 
   /* ===== UPDATE ===== */
@@ -170,8 +166,7 @@ describe('ServicesService (unit)', () => {
       }),
     }))
 
-    await expect(service.update('u1', { name: 'x' } as UpdateServicesDto))
-      .rejects.toThrow('SERVICES_UPDATE_FAILED:404')
+    await expect(service.update('u1', { name: 'x' } as UpdateServicesDto)).rejects.toThrow('SERVICES_UPDATE_FAILED:404')
   })
 
   it('throws 500 when update rejects', async () => {
@@ -183,8 +178,7 @@ describe('ServicesService (unit)', () => {
       }),
     }))
 
-    await expect(service.update('u1', { name: 'x' } as UpdateServicesDto))
-      .rejects.toThrow('SERVICES_UPDATE_FAILED:500')
+    await expect(service.update('u1', { name: 'x' } as UpdateServicesDto)).rejects.toThrow('SERVICES_UPDATE_FAILED:500')
   })
 
   /* ===== DELETE ===== */
@@ -220,4 +214,3 @@ describe('ServicesService (unit)', () => {
     await expect(service.delete('d1')).rejects.toThrow('SERVICES_DELETE_FAILED:500')
   })
 })
-

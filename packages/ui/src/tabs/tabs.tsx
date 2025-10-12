@@ -34,7 +34,7 @@ function Tabs({ value, defaultValue, onValueChange, ...props }: TabsProps) {
 
   return (
     <TabsContext.Provider value={{ activeItem, setActiveItem }}>
-      <div {...props} aria-orientation="vertical" data-slot="tabs" role="tablist" />
+      <div {...props} aria-orientation="vertical" data-slot="tabs" duck-tabs="" role="tablist" />
     </TabsContext.Provider>
   )
 }
@@ -44,12 +44,12 @@ const TabsList = ({ className, ref, ...props }: TabsListProps) => (
   <ul
     className={cn(
       'inline-flex w-fit items-center justify-center gap-2 rounded-md bg-muted p-1 text-muted-foreground',
-
       className,
     )}
     ref={ref}
     {...props}
     data-slot="tabs-list"
+    duck-tabs-list=""
   />
 )
 
@@ -76,7 +76,6 @@ const TabsTrigger = ({
   }, [defaultChecked])
 
   return (
-    // biome-ignore lint: false positive
     <li
       aria-selected={isActive}
       className={cn(
@@ -89,7 +88,8 @@ const TabsTrigger = ({
       id={`tab-${value}`}
       ref={ref}
       {...props}
-      data-slot="tabs-trigger">
+      data-slot="tabs-trigger"
+      duck-tabs-trigger="">
       <input
         checked={isActive}
         className="absolute inset-0 appearance-none rounded-md ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
@@ -131,6 +131,7 @@ const TabsContent = ({
         className,
       )}
       data-value={value}
+      duck-tabs-content=""
       hidden={activeItem !== value}
       ref={localRef}
       role="tabpanel"
