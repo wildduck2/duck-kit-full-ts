@@ -1,5 +1,5 @@
 import { ArgumentMetadata, PipeTransform } from '@nestjs/common'
-import { z, ZodError, ZodSchema } from 'zod'
+import { ZodError, ZodSchema, z } from 'zod'
 import { throwError } from '../libs'
 
 // NOTE: how pipes handles errors.
