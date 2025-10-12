@@ -1,0 +1,17 @@
+{
+  "devDependencies": {
+    "@biomejs/biome": "1.9.4"
+  },
+  "engines": {
+    "node": ">=22.0.0"
+  },
+  "exports": {
+    ".": "./config.json"
+  },
+  "name": "@acme/biome-config",
+  "packageManager": "pnpm@10.12.4",
+  "private": true,
+  "scripts": {},
+  "type": "module",
+  "version": "0.1.0"
+}

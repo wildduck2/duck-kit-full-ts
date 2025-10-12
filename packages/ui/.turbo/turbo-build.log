@@ -1,0 +1,18 @@
+
+
+> @acme/ui@0.1.1 build /run/media/wildduck/duck/wildduck/nasa-hackathon/packages/ui
+> tsdown
+
+[34mℹ[39m tsdown [2mv0.11.13[22m powered by rolldown [2mv1.0.0-beta.9[22m
+
+ [41m ERROR [49m Error: No input files, try "tsdown <your-file>" instead
+    at resolveEntry (file:///run/media/wildduck/duck/wildduck/nasa-hackathon/node_modules/[4m.pnpm[24m/tsdown@0.11.13_typescript@5.8.3/node_modules/[4mtsdown[24m/dist/index.js:377:55)
+    at resolveConfig (file:///run/media/wildduck/duck/wildduck/nasa-hackathon/node_modules/[4m.pnpm[24m/tsdown@0.11.13_typescript@5.8.3/node_modules/[4mtsdown[24m/dist/index.js:607:16)
+    at async Promise.all (index 0)
+    at async Promise.all (index 0)
+    at async resolveOptions (file:///run/media/wildduck/duck/wildduck/nasa-hackathon/node_modules/[4m.pnpm[24m/tsdown@0.11.13_typescript@5.8.3/node_modules/[4mtsdown[24m/dist/index.js:533:19)
+    at async build (file:///run/media/wildduck/duck/wildduck/nasa-hackathon/node_modules/[4m.pnpm[24m/tsdown@0.11.13_typescript@5.8.3/node_modules/[4mtsdown[24m/dist/index.js:673:42)
+    at async CAC.<anonymous> (file:///run/media/wildduck/duck/wildduck/nasa-hackathon/node_modules/[4m.pnpm[24m/tsdown@0.11.13_typescript@5.8.3/node_modules/[4mtsdown[24m/dist/run.js:22:2)
+    at async runCLI (file:///run/media/wildduck/duck/wildduck/nasa-hackathon/node_modules/[4m.pnpm[24m/tsdown@0.11.13_typescript@5.8.3/node_modules/[4mtsdown[24m/dist/run.js:40:3) 
+
+[41m[30m ELIFECYCLE [39m[49m [31mCommand failed with exit code 1.[39m

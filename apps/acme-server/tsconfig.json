@@ -1,0 +1,17 @@
+{
+  "$schema": "https://json.schemastore.org/tsconfig",
+  "compilerOptions": {
+    "jsx": "react-jsx",
+    "lib": ["ES2022"],
+    "module": "preserve",
+    "moduleResolution": "bundler",
+    "outDir": "./dist",
+    "paths": {
+      "~/*": ["./src/*"]
+    },
+    "typeRoots": ["./types", "./node_modules/@types"],
+    "types": ["node", "express-session"]
+  },
+  "extends": "@acme/typescript-config/internal.json",
+  "include": ["src/**/*.ts", "src/**/*.tsx", "types"]
+}

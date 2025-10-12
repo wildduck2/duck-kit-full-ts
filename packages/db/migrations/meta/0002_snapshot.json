@@ -1,0 +1,555 @@
+{
+  "_meta": {
+    "columns": {},
+    "schemas": {},
+    "tables": {}
+  },
+  "dialect": "postgresql",
+  "enums": {
+    "public.token_status": {
+      "name": "token_status",
+      "schema": "public",
+      "values": ["active", "revoked", "expired"]
+    }
+  },
+  "id": "5d0b9392-5e57-47f8-977d-72326a484851",
+  "policies": {},
+  "prevId": "e8dcfaeb-993e-40b3-9562-29d805e4eace",
+  "roles": {},
+  "schemas": {},
+  "sequences": {},
+  "tables": {
+    "public.access_tokens": {
+      "checkConstraints": {},
+      "columns": {
+        "created_at": {
+          "default": "CURRENT_TIMESTAMP",
+          "name": "created_at",
+          "notNull": true,
+          "primaryKey": false,
+          "type": "timestamp with time zone"
+        },
+        "deleted_at": {
+          "name": "deleted_at",
+          "notNull": false,
+          "primaryKey": false,
+          "type": "timestamp with time zone"
+        },
+        "expires_at": {
+          "name": "expires_at",
+          "notNull": true,
+          "primaryKey": false,
+          "type": "timestamp with time zone"
+        },
+        "id": {
+          "default": "gen_random_uuid()",
+          "name": "id",
+          "notNull": true,
+          "primaryKey": true,
+          "type": "uuid"
+        },
+        "name": {
+          "name": "name",
+          "notNull": true,
+          "primaryKey": false,
+          "type": "varchar(255)"
+        },
+        "renewed_at": {
+          "name": "renewed_at",
+          "notNull": false,
+          "primaryKey": false,
+          "type": "timestamp with time zone"
+        },
+        "service_id": {
+          "name": "service_id",
+          "notNull": true,
+          "primaryKey": false,
+          "type": "uuid"
+        },
+        "status": {
+          "name": "status",
+          "notNull": true,
+          "primaryKey": false,
+          "type": "token_status",
+          "typeSchema": "public"
+        },
+        "token": {
+          "name": "token",
+          "notNull": true,
+          "primaryKey": false,
+          "type": "varchar(255)"
+        },
+        "updated_at": {
+          "default": "CURRENT_TIMESTAMP",
+          "name": "updated_at",
+          "notNull": true,
+          "primaryKey": false,
+          "type": "timestamp with time zone"
+        },
+        "user_id": {
+          "name": "user_id",
+          "notNull": false,
+          "primaryKey": false,
+          "type": "uuid"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "foreignKeys": {
+        "access_tokens_service_id_services_id_fk": {
+          "columnsFrom": ["service_id"],
+          "columnsTo": ["id"],
+          "name": "access_tokens_service_id_services_id_fk",
+          "onDelete": "cascade",
+          "onUpdate": "no action",
+          "tableFrom": "access_tokens",
+          "tableTo": "services"
+        },
+        "access_tokens_user_id_users_id_fk": {
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
+          "name": "access_tokens_user_id_users_id_fk",
+          "onDelete": "set null",
+          "onUpdate": "no action",
+          "tableFrom": "access_tokens",
+          "tableTo": "users"
+        }
+      },
+      "indexes": {
+        "token_expiry_idx": {
+          "columns": [
+            {
+              "asc": true,
+              "expression": "expires_at",
+              "isExpression": false,
+              "nulls": "last"
+            }
+          ],
+          "concurrently": false,
+          "isUnique": false,
+          "method": "btree",
+          "name": "token_expiry_idx",
+          "with": {}
+        },
+        "token_service_idx": {
+          "columns": [
+            {
+              "asc": true,
+              "expression": "service_id",
+              "isExpression": false,
+              "nulls": "last"
+            },
+            {
+              "asc": true,
+              "expression": "status",
+              "isExpression": false,
+              "nulls": "last"
+            }
+          ],
+          "concurrently": false,
+          "isUnique": false,
+          "method": "btree",
+          "name": "token_service_idx",
+          "with": {}
+        },
+        "token_user_idx": {
+          "columns": [
+            {
+              "asc": true,
+              "expression": "user_id",
+              "isExpression": false,
+              "nulls": "last"
+            }
+          ],
+          "concurrently": false,
+          "isUnique": false,
+          "method": "btree",
+          "name": "token_user_idx",
+          "with": {}
+        }
+      },
+      "isRLSEnabled": false,
+      "name": "access_tokens",
+      "policies": {},
+      "schema": "",
+      "uniqueConstraints": {}
+    },
+    "public.otp_codes": {
+      "checkConstraints": {},
+      "columns": {
+        "code": {
+          "name": "code",
+          "notNull": true,
+          "primaryKey": false,
+          "type": "varchar(6)"
+        },
+        "created_at": {
+          "default": "CURRENT_TIMESTAMP",
+          "name": "created_at",
+          "notNull": true,
+          "primaryKey": false,
+          "type": "timestamp with time zone"
+        },
+        "deleted_at": {
+          "name": "deleted_at",
+          "notNull": false,
+          "primaryKey": false,
+          "type": "timestamp with time zone"
+        },
+        "expires_at": {
+          "name": "expires_at",
+          "notNull": true,
+          "primaryKey": false,
+          "type": "timestamp with time zone"
+        },
+        "id": {
+          "default": "gen_random_uuid()",
+          "name": "id",
+          "notNull": true,
+          "primaryKey": true,
+          "type": "uuid"
+        },
+        "is_active": {
+          "default": true,
+          "name": "is_active",
+          "notNull": true,
+          "primaryKey": false,
+          "type": "boolean"
+        },
+        "updated_at": {
+          "default": "CURRENT_TIMESTAMP",
+          "name": "updated_at",
+          "notNull": true,
+          "primaryKey": false,
+          "type": "timestamp with time zone"
+        },
+        "user_id": {
+          "name": "user_id",
+          "notNull": true,
+          "primaryKey": false,
+          "type": "uuid"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "foreignKeys": {
+        "otp_codes_user_id_users_id_fk": {
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
+          "name": "otp_codes_user_id_users_id_fk",
+          "onDelete": "cascade",
+          "onUpdate": "no action",
+          "tableFrom": "otp_codes",
+          "tableTo": "users"
+        }
+      },
+      "indexes": {
+        "active_codes_idx": {
+          "columns": [
+            {
+              "asc": true,
+              "expression": "is_active",
+              "isExpression": false,
+              "nulls": "last"
+            },
+            {
+              "asc": true,
+              "expression": "expires_at",
+              "isExpression": false,
+              "nulls": "last"
+            }
+          ],
+          "concurrently": false,
+          "isUnique": false,
+          "method": "btree",
+          "name": "active_codes_idx",
+          "where": "deleted_at IS NULL",
+          "with": {}
+        },
+        "user_codes_idx": {
+          "columns": [
+            {
+              "asc": true,
+              "expression": "user_id",
+              "isExpression": false,
+              "nulls": "last"
+            },
+            {
+              "asc": true,
+              "expression": "created_at",
+              "isExpression": false,
+              "nulls": "last"
+            }
+          ],
+          "concurrently": false,
+          "isUnique": false,
+          "method": "btree",
+          "name": "user_codes_idx",
+          "with": {}
+        }
+      },
+      "isRLSEnabled": false,
+      "name": "otp_codes",
+      "policies": {},
+      "schema": "",
+      "uniqueConstraints": {}
+    },
+    "public.services": {
+      "checkConstraints": {},
+      "columns": {
+        "created_at": {
+          "default": "CURRENT_TIMESTAMP",
+          "name": "created_at",
+          "notNull": true,
+          "primaryKey": false,
+          "type": "timestamp with time zone"
+        },
+        "deleted_at": {
+          "name": "deleted_at",
+          "notNull": false,
+          "primaryKey": false,
+          "type": "timestamp with time zone"
+        },
+        "description": {
+          "name": "description",
+          "notNull": false,
+          "primaryKey": false,
+          "type": "text"
+        },
+        "id": {
+          "default": "gen_random_uuid()",
+          "name": "id",
+          "notNull": true,
+          "primaryKey": true,
+          "type": "uuid"
+        },
+        "name": {
+          "name": "name",
+          "notNull": true,
+          "primaryKey": false,
+          "type": "varchar(100)"
+        },
+        "updated_at": {
+          "default": "CURRENT_TIMESTAMP",
+          "name": "updated_at",
+          "notNull": true,
+          "primaryKey": false,
+          "type": "timestamp with time zone"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "foreignKeys": {},
+      "indexes": {
+        "active_services_idx": {
+          "columns": [
+            {
+              "asc": true,
+              "expression": "name",
+              "isExpression": false,
+              "nulls": "last"
+            }
+          ],
+          "concurrently": false,
+          "isUnique": false,
+          "method": "btree",
+          "name": "active_services_idx",
+          "where": "deleted_at IS NULL",
+          "with": {}
+        },
+        "service_name_idx": {
+          "columns": [
+            {
+              "asc": true,
+              "expression": "name",
+              "isExpression": false,
+              "nulls": "last"
+            }
+          ],
+          "concurrently": false,
+          "isUnique": true,
+          "method": "btree",
+          "name": "service_name_idx",
+          "with": {}
+        }
+      },
+      "isRLSEnabled": false,
+      "name": "services",
+      "policies": {},
+      "schema": "",
+      "uniqueConstraints": {
+        "services_name_unique": {
+          "columns": ["name"],
+          "name": "services_name_unique",
+          "nullsNotDistinct": false
+        }
+      }
+    },
+    "public.users": {
+      "checkConstraints": {},
+      "columns": {
+        "avatar_url": {
+          "name": "avatar_url",
+          "notNull": false,
+          "primaryKey": false,
+          "type": "text"
+        },
+        "created_at": {
+          "default": "CURRENT_TIMESTAMP",
+          "name": "created_at",
+          "notNull": true,
+          "primaryKey": false,
+          "type": "timestamp with time zone"
+        },
+        "deleted_at": {
+          "name": "deleted_at",
+          "notNull": false,
+          "primaryKey": false,
+          "type": "timestamp with time zone"
+        },
+        "email": {
+          "name": "email",
+          "notNull": true,
+          "primaryKey": false,
+          "type": "varchar(255)"
+        },
+        "first_name": {
+          "name": "first_name",
+          "notNull": true,
+          "primaryKey": false,
+          "type": "varchar(100)"
+        },
+        "id": {
+          "default": "gen_random_uuid()",
+          "name": "id",
+          "notNull": true,
+          "primaryKey": true,
+          "type": "uuid"
+        },
+        "is_active": {
+          "default": true,
+          "name": "is_active",
+          "notNull": true,
+          "primaryKey": false,
+          "type": "boolean"
+        },
+        "last_login_at": {
+          "name": "last_login_at",
+          "notNull": false,
+          "primaryKey": false,
+          "type": "timestamp with time zone"
+        },
+        "last_name": {
+          "name": "last_name",
+          "notNull": true,
+          "primaryKey": false,
+          "type": "varchar(100)"
+        },
+        "password_hash": {
+          "name": "password_hash",
+          "notNull": true,
+          "primaryKey": false,
+          "type": "varchar(255)"
+        },
+        "settings": {
+          "default": "'{}'::jsonb",
+          "name": "settings",
+          "notNull": false,
+          "primaryKey": false,
+          "type": "jsonb"
+        },
+        "updated_at": {
+          "default": "CURRENT_TIMESTAMP",
+          "name": "updated_at",
+          "notNull": true,
+          "primaryKey": false,
+          "type": "timestamp with time zone"
+        },
+        "username": {
+          "name": "username",
+          "notNull": true,
+          "primaryKey": false,
+          "type": "varchar(100)"
+        },
+        "version": {
+          "default": 1,
+          "name": "version",
+          "notNull": true,
+          "primaryKey": false,
+          "type": "integer"
+        }
+      },
+      "compositePrimaryKeys": {},
+      "foreignKeys": {},
+      "indexes": {
+        "active_users_idx": {
+          "columns": [
+            {
+              "asc": true,
+              "expression": "is_active",
+              "isExpression": false,
+              "nulls": "last"
+            },
+            {
+              "asc": true,
+              "expression": "last_login_at",
+              "isExpression": false,
+              "nulls": "last"
+            }
+          ],
+          "concurrently": false,
+          "isUnique": false,
+          "method": "btree",
+          "name": "active_users_idx",
+          "where": "deleted_at IS NULL",
+          "with": {}
+        },
+        "user_email_idx": {
+          "columns": [
+            {
+              "asc": true,
+              "expression": "email",
+              "isExpression": false,
+              "nulls": "last"
+            }
+          ],
+          "concurrently": false,
+          "isUnique": true,
+          "method": "btree",
+          "name": "user_email_idx",
+          "with": {}
+        },
+        "user_username_idx": {
+          "columns": [
+            {
+              "asc": true,
+              "expression": "username",
+              "isExpression": false,
+              "nulls": "last"
+            }
+          ],
+          "concurrently": false,
+          "isUnique": true,
+          "method": "btree",
+          "name": "user_username_idx",
+          "with": {}
+        }
+      },
+      "isRLSEnabled": false,
+      "name": "users",
+      "policies": {},
+      "schema": "",
+      "uniqueConstraints": {
+        "users_email_unique": {
+          "columns": ["email"],
+          "name": "users_email_unique",
+          "nullsNotDistinct": false
+        },
+        "users_username_unique": {
+          "columns": ["username"],
+          "name": "users_username_unique",
+          "nullsNotDistinct": false
+        }
+      }
+    }
+  },
+  "version": "7",
+  "views": {}
+}

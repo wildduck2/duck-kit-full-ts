@@ -1,0 +1,1 @@
+ALTER TABLE "access_tokens" ALTER COLUMN "status" DROP DEFAULT;
