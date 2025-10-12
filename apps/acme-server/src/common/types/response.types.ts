@@ -1,10 +1,10 @@
-export type ResponseType<TData extends (...args: any[]) => any, TMessage extends string = any> =
+export type ResponseType<TData extends unknown, TError extends readonly string[] = []> =
   | {
       state: 'error'
-      message: TMessage
+      error: TError[number]
+      message: string
     }
   | {
-      data: Awaited<ReturnType<TData>>
+      data: TData
       state: 'success'
-      message: TMessage
     }

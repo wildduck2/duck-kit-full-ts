@@ -1,5 +1,5 @@
-import type { ArgumentMetadata, PipeTransform } from '@nestjs/common'
-import type { ZodError, ZodSchema, z } from 'zod'
+import { ArgumentMetadata, PipeTransform } from '@nestjs/common'
+import { z, ZodSchema } from 'zod'
 import { throwError } from '../libs'
 
 // NOTE: how pipes handles errors.
@@ -10,9 +10,8 @@ export class ZodValidationPipe implements PipeTransform {
     try {
       return this.schema.parse(value)
     } catch (error) {
-      const { errors } = error as ZodError
-      console.log(error)
-      throwError(`${errors[0].message}`)
+      console.log('ZOD_VALIDATION_PIPE', error)
+      throwError('ZOD_VALIDATION_PIPE')
     }
   }
 }
