@@ -59,7 +59,7 @@ export class AuthController {
     const user = await this.authService.signup(body)
 
     if (user) {
-      this.emailService.sendTestEmail({
+      this.emailService.sendEmail({
         subject: TemplateText.welcome.subject,
         template: {
           args: {
@@ -134,7 +134,7 @@ export class AuthController {
     const data = await this.authService.forgotPassword(body)
 
     if (data?.otp) {
-      this.emailService.sendTestEmail({
+      this.emailService.sendEmail({
         subject: TemplateText.forgot_password.subject,
         template: {
           args: {

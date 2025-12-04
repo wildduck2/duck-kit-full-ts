@@ -1,5 +1,4 @@
 import { Module } from '@nestjs/common'
-import { ConfigService } from '@nestjs/config'
 import { DrizzleModule } from '~/drizzle'
 import { EmailService } from './email.service'
 

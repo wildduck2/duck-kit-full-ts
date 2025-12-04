@@ -18,13 +18,12 @@ export class ServicesService {
     try {
       const services = await this.db.query.services.findMany()
 
-      if (!services.length)
-        throwError<ServicesMessagesType>('SERVICES_GET_ALL_FAILED', 404, { message: 'No services found' })
+      if (!services.length) throwError<ServicesMessagesType>('SERVICES_GET_ALL_FAILED', 404)
 
       return services
     } catch (err: unknown) {
       if (err instanceof Error && (err as any).status === 404) throw err
-      throwError<ServicesMessagesType>('SERVICES_GET_ALL_FAILED', 500, { cause: (err as Error).message })
+      throwError<ServicesMessagesType>('SERVICES_GET_ALL_FAILED', 500)
     }
   }
 
@@ -35,13 +34,12 @@ export class ServicesService {
         where: eq(schema.services.id, id),
       })
 
-      if (!service)
-        throwError<ServicesMessagesType>('SERVICES_GET_ONE_FAILED', 404, { message: `Service ${id} not found` })
+      if (!service) throwError<ServicesMessagesType>('SERVICES_GET_ONE_FAILED', 404)
 
       return service
     } catch (err: unknown) {
       if (err instanceof Error && (err as any).status === 404) throw err
-      throwError<ServicesMessagesType>('SERVICES_GET_ONE_FAILED', 500, { cause: (err as Error).message })
+      throwError<ServicesMessagesType>('SERVICES_GET_ONE_FAILED', 500)
     }
   }
 
@@ -60,7 +58,7 @@ export class ServicesService {
       return _service
     } catch (err: unknown) {
       if (err instanceof Error && (err as any).status === 404) throw err
-      throwError<ServicesMessagesType>('SERVICES_CREATE_FAILED', 500, { cause: (err as Error).message })
+      throwError<ServicesMessagesType>('SERVICES_CREATE_FAILED', 500)
     }
   }
 
@@ -74,7 +72,7 @@ export class ServicesService {
       return service
     } catch (err: unknown) {
       if (err instanceof Error && (err as any).status === 404) throw err
-      throwError<ServicesMessagesType>('SERVICES_UPDATE_FAILED', 500, { cause: (err as Error).message })
+      throwError<ServicesMessagesType>('SERVICES_UPDATE_FAILED', 500)
     }
   }
 
@@ -88,7 +86,7 @@ export class ServicesService {
       return null
     } catch (err: unknown) {
       if (err instanceof Error && (err as any).status === 404) throw err
-      throwError<ServicesMessagesType>('SERVICES_DELETE_FAILED', 500, { cause: (err as Error).message })
+      throwError<ServicesMessagesType>('SERVICES_DELETE_FAILED', 500)
     }
   }
 }

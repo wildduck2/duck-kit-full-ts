@@ -2,8 +2,8 @@ import { Controller, Get, Param, Post, Res, UploadedFile, UseInterceptors } from
 import { FileInterceptor } from '@nestjs/platform-express'
 import type { Response } from 'express'
 import type { ResponseType } from '~/common/types'
-import type { MinioMessage } from './minio.constants'
 import { MinioService } from './minio.service'
+import { MinioMessageType } from './minio.types'
 
 @Controller('upload')
 export class MinioController {
@@ -13,7 +13,7 @@ export class MinioController {
   @UseInterceptors(FileInterceptor('file'))
   async upload(
     @UploadedFile() file: any,
-  ): Promise<ResponseType<Awaited<ReturnType<typeof this.minioService.uploadFile>>, typeof MinioMessage>> {
+  ): Promise<ResponseType<typeof this.minioService.uploadFile, MinioMessageType>> {
     const path = await this.minioService.uploadFile(file.originalname, file.buffer, file.mimetype)
     return { data: path, message: 'MINIO_FILE_UPLOAD_SUCCESS', state: 'success' }
   }
