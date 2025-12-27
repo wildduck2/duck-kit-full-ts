@@ -7,7 +7,7 @@ import { AuthMessageType } from './auth.types'
 @Injectable()
 export class AuthGuard implements CanActivate {
   canActivate(context: ExecutionContext): boolean | Promise<boolean> | Observable<boolean> {
-    if (context.switchToHttp().getRequest<Request>().session.userId) return true
+    if (context.switchToHttp().getRequest<Request>().session.user?.id) return true
 
     throwError<AuthMessageType>('AUTH_INVALID_CREDENTIALS')
     return false

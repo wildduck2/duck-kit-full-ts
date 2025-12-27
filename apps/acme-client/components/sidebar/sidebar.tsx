@@ -10,16 +10,16 @@ import { NavUser } from './nav-user'
 
 const data = {
   navMain: [
-    {
-      href: '/api-tokens',
-      icon: QrCode,
-      title: 'API Tokens',
-    },
-    {
-      href: '/services',
-      icon: Coins,
-      title: 'Services',
-    },
+    // {
+    //   href: '/api-tokens',
+    //   icon: QrCode,
+    //   title: 'API Tokens',
+    // },
+    // {
+    //   href: '/services',
+    //   icon: Coins,
+    //   title: 'Services',
+    // },
     // {
     //   href: '/analytics',
     //   icon: BarChart3,

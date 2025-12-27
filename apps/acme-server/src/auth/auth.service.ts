@@ -32,7 +32,7 @@ export class AuthService {
       })
 
       if (!_user) {
-        throwError<AuthMessageType>('AUTH_USERNAME_INVALID', 401)
+        throw throwError<AuthMessageType>('AUTH_USERNAME_INVALID', 401)
       }
 
       const passwordMatch = await PasswordHasher.comparePassword(data.password, _user.password_hash)
@@ -53,6 +53,7 @@ export class AuthService {
     try {
       const password_hash = await PasswordHasher.hashPassword(data.password)
 
+      console.log(password_hash)
       const insertedUsers = await this.db
         .insert(schema.users)
         .values({
@@ -65,21 +66,18 @@ export class AuthService {
         .returning()
 
       if (!insertedUsers?.length) {
-        throwError<AuthMessageType>('AUTH_REGISTRATION_FAILED', 500)
-        return
+        throw throwError<AuthMessageType>('AUTH_REGISTRATION_FAILED', 500)
       }
       const user = insertedUsers[0]
       const { password_hash: _, ...safeUser } = user
       return safeUser
     } catch (error) {
       if (String((error as DrizzleError).cause).includes('user_table_user_name_unique')) {
-        throwError<AuthMessageType>('AUTH_USERNAME_ALREADY_EXISTS', 409)
-        return
+        throw throwError<AuthMessageType>('AUTH_USERNAME_ALREADY_EXISTS', 409)
       }
 
       if (String((error as DrizzleError).cause).includes('user_table_email_unique')) {
-        throwError<AuthMessageType>('AUTH_EMAIL_ALREADY_EXISTS', 409)
-        return
+        throw throwError<AuthMessageType>('AUTH_EMAIL_ALREADY_EXISTS', 409)
       }
 
       throwError<AuthMessageType>('AUTH_REGISTRATION_FAILED', 500)
@@ -102,13 +100,11 @@ export class AuthService {
       })
 
       if (!user) {
-        throwError<AuthMessageType>('AUTH_USER_NOT_FOUND_OR_UNAUTHORIZED', 401)
-        return
+        throw throwError<AuthMessageType>('AUTH_USER_NOT_FOUND_OR_UNAUTHORIZED', 401)
       }
       return user
     } catch (error) {
-      throwError<AuthMessageType>('AUTH_GET_ACCOUNT_INFORMATION_FAILED', 401)
-      return
+      throw throwError<AuthMessageType>('AUTH_GET_ACCOUNT_INFORMATION_FAILED', 401)
     }
   }
 
@@ -119,8 +115,7 @@ export class AuthService {
       })
 
       if (!user) {
-        throwError<AuthMessageType>('AUTH_USER_NOT_FOUND', 404)
-        return
+        throw throwError<AuthMessageType>('AUTH_USER_NOT_FOUND', 404)
       }
 
       const OTP = otpGenerator.generate(6, {
@@ -141,13 +136,11 @@ export class AuthService {
         .returning()
 
       if (!otp?.length) {
-        throwError<AuthMessageType>('AUTH_FORGOT_PASSWORD_FAILED', 500)
-        return
+        throw throwError<AuthMessageType>('AUTH_FORGOT_PASSWORD_FAILED', 500)
       }
       return { otp, user }
     } catch (error) {
-      throwError<AuthMessageType>('AUTH_FORGOT_PASSWORD_FAILED', 500)
-      return
+      throw throwError<AuthMessageType>('AUTH_FORGOT_PASSWORD_FAILED', 500)
     }
   }
 
@@ -163,13 +156,11 @@ export class AuthService {
         .returning()
 
       if (!user?.length) {
-        throwError<AuthMessageType>('AUTH_USER_NOT_FOUND_OR_RESET_PASSWORD_FAILED', 500)
-        return
+        throw throwError<AuthMessageType>('AUTH_USER_NOT_FOUND_OR_RESET_PASSWORD_FAILED', 500)
       }
       return user
     } catch (error) {
-      throwError<AuthMessageType>('AUTH_RESET_PASSWORD_FAILED', 500)
-      return
+      throw throwError<AuthMessageType>('AUTH_RESET_PASSWORD_FAILED', 500)
     }
   }
 
@@ -182,13 +173,11 @@ export class AuthService {
         .returning()
 
       if (!user?.length) {
-        throwError<AuthMessageType>('AUTH_USER_NOT_FOUND_OR_UPDATE_ACCOUNT_INFORMATION_FAILED', 500)
-        return
+        throw throwError<AuthMessageType>('AUTH_USER_NOT_FOUND_OR_UPDATE_ACCOUNT_INFORMATION_FAILED', 500)
       }
       return user
     } catch (error) {
-      throwError<AuthMessageType>('AUTH_UPDATE_ACCOUNT_INFORMATION_FAILED', 500)
-      return
+      throw throwError<AuthMessageType>('AUTH_UPDATE_ACCOUNT_INFORMATION_FAILED', 500)
     }
   }
 
@@ -197,13 +186,11 @@ export class AuthService {
       const otp = await this.db.delete(schema.otpCodes).where(eq(schema.otpCodes.user_id, data.user_id)).returning()
 
       if (!otp?.length) {
-        throwError<AuthMessageType>('AUTH_USER_NOT_FOUND_OR_VERIFY_CODE_FAILED', 500)
-        return
+        throw throwError<AuthMessageType>('AUTH_USER_NOT_FOUND_OR_VERIFY_CODE_FAILED', 500)
       }
       return null
     } catch (error) {
-      throwError<AuthMessageType>('AUTH_VERIFY_CODE_FAILED', 500)
-      return
+      throw throwError<AuthMessageType>('AUTH_VERIFY_CODE_FAILED', 500)
     }
   }
 
@@ -211,13 +198,11 @@ export class AuthService {
     try {
       const user = await this.db.delete(schema.users).where(eq(schema.users.id, data.user_id)).returning()
       if (!user?.length) {
-        throwError<AuthMessageType>('AUTH_USER_NOT_FOUND_OR_DELETE_ACCOUNT_FAILED', 500)
-        return
+        throw throwError<AuthMessageType>('AUTH_USER_NOT_FOUND_OR_DELETE_ACCOUNT_FAILED', 500)
       }
       return null
     } catch (error) {
-      throwError<AuthMessageType>('AUTH_DELETE_ACCOUNT_FAILED', 500)
-      return
+      throw throwError<AuthMessageType>('AUTH_DELETE_ACCOUNT_FAILED', 500)
     }
   }
 }
